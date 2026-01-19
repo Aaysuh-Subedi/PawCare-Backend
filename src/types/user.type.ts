@@ -1,10 +1,11 @@
 import z from "zod";
 
 export const UserSchema = z.object({
-    FullName: z.string().min(1),
-    email: z.email(),
+    Firstname: z.string().min(2),
+    Lastname: z.string().min(2),
+    email: z.string().email(),
     password: z.string().min(8),
-    phone: z.string().min(10),
+    phone: z.string().min(10).optional(),
     role: z.enum(["user", "admin", "provider"]).default("user"),
 
 });

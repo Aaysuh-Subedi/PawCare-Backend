@@ -6,7 +6,8 @@ export class UserRepository {
 		const user = await UserModel.create({
 			email: data.email,
 			password: data.password,
-			FullName: data.FullName,
+			Firstname: data.Firstname,
+			Lastname: data.Lastname,
 			phone: data.phone,
 		});
 		return user;
@@ -16,15 +17,15 @@ export class UserRepository {
 		return UserModel.findOne({ email }).exec();
 	}
 
-	async getUserByFullName(FullName: string): Promise<IUser | null> {
-		return UserModel.findOne({ FullName }).exec();
+	async getUserByFullName(fullName: string): Promise<IUser | null> {
+		return UserModel.findOne({ fullName }).exec();
 	}
 
 	async getUserById(id: string): Promise<IUser | null> {
 		return UserModel.findById(id).exec();
 	}
 
-	async updateUserById(id: string, updates: Partial<Pick<IUser, "email" | "password" | "FullName" | "phone" | "role">>): Promise<IUser | null> {
+	async updateUserById(id: string, updates: Partial<Pick<IUser, "email" | "password" | "Firstname" | "Lastname" | "phone" | "role">>): Promise<IUser | null> {
 		return UserModel.findByIdAndUpdate(id, updates, { new: true }).exec();
 	}
 
