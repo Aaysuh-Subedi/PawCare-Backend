@@ -1,0 +1,28 @@
+import mongoose, {Document, Schema} from "mongoose";
+import { ProviderType } from "../types/provider.type";
+
+const ProviderSchema: Schema = new Schema(
+    {
+        businessName: {type: String, required: true},
+        address: {type: String, required: true},
+        phone: {type: String},
+        rating: {type: Number, default: 0},
+
+    },
+    {
+        timestamps: true,
+    }
+);
+
+export interface IProvider extends ProviderType, Document { //extends Document to include mongoose document properties
+    _id: mongoose.Types.ObjectId;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export const ProviderModel = mongoose.model<IProvider>("Provider", ProviderSchema);
+// ProviderModel will be used to interact with the providers collection in MongoDB
+// It provides methods to create, read, update, and delete provider documents
+
+
+
