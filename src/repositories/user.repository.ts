@@ -32,5 +32,10 @@ export class UserRepository {
 	async deleteUserById(id: string): Promise<IUser | null> {
 		return UserModel.findByIdAndDelete(id).exec();
 	}
+
+	async updateAdminRole(id: string, role: "user" | "admin" | "provider"): Promise<IUser | null> {
+		return UserModel.findByIdAndUpdate(id, { role }, { new: true }).exec();
+	}
+	
 }
 
