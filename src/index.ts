@@ -5,6 +5,8 @@ import { connectdb } from './database/mongodb';
 import { PORT } from './config';
 import authRoutes from './routes/auth.route';
 import providerRouter from "./routes/provider.route";
+import multer from 'multer';
+import petroute from './routes/pet.route';
 import path from 'path';
 
 const app: Application = express();
@@ -70,7 +72,7 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/auth', authRoutes);
 // Provider routes
 app.use("/api/provider", providerRouter);
-
+app.use("/api/pet", petroute);
 async function startServer() {
     await connectdb();
     app.listen(PORT, () => {
