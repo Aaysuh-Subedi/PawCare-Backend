@@ -2,9 +2,12 @@ import { Router } from "express";
 import { AuthController } from "../controller/auth.controller";
 import { authorizedMiddleware } from "../middleware/authorization.middleware";
 import { upload, uploads } from "../middleware/upload.middleware";
+import multer from "multer";
 
 const router = Router();
 const authController = new AuthController();
+
+
 
 router.post("/register", (req, res) => authController.register(req, res));
 router.post("/login", (req, res) => authController.login(req, res));

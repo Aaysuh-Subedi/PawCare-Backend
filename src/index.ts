@@ -8,6 +8,7 @@ import providerRouter from "./routes/provider.route";
 import multer from 'multer';
 import petroute from './routes/pet.route';
 import path from 'path';
+import uploadRouter from './routes/upload.route';
 
 const app: Application = express();
 
@@ -19,8 +20,7 @@ let corsOptions = {
 
 // origin: "*", allow all domians
 app.use(cors(corsOptions));
-
-app.use('/uploads', express.static(path.join(__dirname, '../uploads'))); // Serve static files from uploads directory
+app.use("/api/upload", uploadRouter);// Serve static files from uploads directory
 
 // app.use(cors());
 app.use(bodyParser.json());
@@ -73,6 +73,8 @@ app.use('/api/auth', authRoutes);
 // Provider routes
 app.use("/api/provider", providerRouter);
 app.use("/api/pet", petroute);
+app.use("/api/upload", uploadRouter);
+
 async function startServer() {
     await connectdb();
     app.listen(PORT, () => {
