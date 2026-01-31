@@ -5,10 +5,8 @@ import { connectdb } from './database/mongodb';
 import { PORT } from './config';
 import authRoutes from './routes/auth.route';
 import providerRouter from "./routes/provider.route";
-import multer from 'multer';
-import petroute from './routes/pet.route';
+import petRouter from "./routes/pet.route";
 import path from 'path';
-import uploadRouter from './routes/upload.route';
 
 const app: Application = express();
 
@@ -20,7 +18,8 @@ let corsOptions = {
 
 // origin: "*", allow all domians
 app.use(cors(corsOptions));
-app.use("/api/upload", uploadRouter);// Serve static files from uploads directory
+
+app.use('/uploads', express.static(path.join(__dirname, '../uploads'))); // Serve static files from uploads directory
 
 // app.use(cors());
 app.use(bodyParser.json());
@@ -72,8 +71,8 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/auth', authRoutes);
 // Provider routes
 app.use("/api/provider", providerRouter);
-app.use("/api/pet", petroute);
-app.use("/api/upload", uploadRouter);
+// Pet routes
+app.use("/api/pet", petRouter);
 
 async function startServer() {
     await connectdb();

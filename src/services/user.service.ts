@@ -78,22 +78,10 @@ export class UserService {
         if(!user){
             throw new HttpError(404, "User not found");
         }
-        if(user.email !== data.email){
-            const emailExists = await userRepository.getUserByEmail(data.email!);
+        if(data.email && user.email !== data.email){
+            const emailExists = await userRepository.getUserByEmail(data.email);
             if(emailExists){
                 throw new HttpError(409, "Email already exists");
-            }
-        }
-        if(user.Firstname !== data.Firstname){
-            const firstNameExists = await userRepository.getUserByFullName(data.Firstname!);
-            if(firstNameExists){
-                throw new HttpError(409, "First name already exists");
-            }
-        }
-        if(user.Lastname !== data.Lastname){
-            const lastNameExists = await userRepository.getUserByFullName(data.Lastname!);
-            if(lastNameExists){
-                throw new HttpError(409, "Last name already exists");
             }
         }
         if(data.password){

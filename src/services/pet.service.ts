@@ -1,67 +1,59 @@
-import { CreatePetDTO, UpdatePetDTO } from "../dtos/pet.dto";
+import { CreatePetDto, UpdatePetDto } from "../dtos/pet.dto";
 import { HttpError } from "../errors/http-error";
 import { PetRepository } from "../repositories/pet.repository";
 
-let petRepository = new PetRepository();
+const petRepository = new PetRepository();
 
 export class PetService {
-    async createPet(data: CreatePetDTO & { ownerId: string }) {
-        const newPet = await petRepository.createPet(data);
-        return newPet;
+    async createPet(ownerId: string, data: CreatePetDto) {
+        if (!ownerId) {
+            throw new HttpError(400, "Owner ID is required");
+        }
+        return petRepository.createPet(ownerId, data);
     }
 
-    // Get all pets for a specific user
-    async getAllPetsByUserId(userId: string) {
-        const pets = await petRepository.getAllPetsByUserId(userId);
-        return pets;
-    }
-
-    // Get pet by ID, but verify ownership
-    async getPetById(petId: string, userId: string) {
+    async getPetById(petId: string, ownerId: string, role?: string) {
         if (!petId) {
             throw new HttpError(400, "Pet ID is required");
         }
-
-        const pet = await petRepository.getPetByIdAndOwner(petId, userId);
-        
+        const pet = await petRepository.getPetById(petId);
         if (!pet) {
-            throw new HttpError(404, "Pet not found or you don't have permission to view it");
+            throw new HttpError(404, "Pet not found");
         }
-
+        if (role !== "admin" && pet.ownerId?.toString() !== ownerId) {
+            throw new HttpError(403, "Forbidden");
+        }
         return pet;
     }
 
-    // Update pet, but verify ownership first
-    async updatePetById(petId: string, updates: UpdatePetDTO, userId: string) {
-        if (!petId) {
-            throw new HttpError(400, "Pet ID is required");
+    async getAllPetsForUser(ownerId: string) {
+        if (!ownerId) {
+            throw new HttpError(400, "Owner ID is required");
         }
-
-        // First check if pet exists and belongs to user
-        const existingPet = await petRepository.getPetByIdAndOwner(petId, userId);
-        
-        if (!existingPet) {
-            throw new HttpError(404, "Pet not found or you don't have permission to update it");
-        }
-
-        const updatedPet = await petRepository.updatePetById(petId, updates);
-        return updatedPet;
+        return petRepository.getPetsByOwnerId(ownerId);
     }
 
-    // Delete pet, but verify ownership first
-    async deletePetById(petId: string, userId: string) {
-        if (!petId) {
-            throw new HttpError(400, "Pet ID is required");
+    async updatePet(petId: string, ownerId: string, data: UpdatePetDto, role?: string) {
+        const existing = await this.getPetById(petId, ownerId, role);
+        if (!existing) {
+            throw new HttpError(404, "Pet not found");
         }
-
-        // First check if pet exists and belongs to user
-        const existingPet = await petRepository.getPetByIdAndOwner(petId, userId);
-        
-        if (!existingPet) {
-            throw new HttpError(404, "Pet not found or you don't have permission to delete it");
+        const updated = await petRepository.updatePetById(petId, data);
+        if (!updated) {
+            throw new HttpError(404, "Pet not found");
         }
+        return updated;
+    }
 
-        const deletedPet = await petRepository.deletePetById(petId);
-        return deletedPet;
+    async deletePet(petId: string, ownerId: string, role?: string) {
+        const existing = await this.getPetById(petId, ownerId, role);
+        if (!existing) {
+            throw new HttpError(404, "Pet not found");
+        }
+        const deleted = await petRepository.deletePetById(petId);
+        if (!deleted) {
+            throw new HttpError(404, "Pet not found");
+        }
+        return deleted;
     }
 }

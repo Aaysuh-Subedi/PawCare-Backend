@@ -1,39 +1,28 @@
-import { PetModel, IPet } from "../models/pet.model";
-import { CreatePetDTO } from "../dtos/pet.dto";
+import { CreatePetDto, UpdatePetDto } from "../dtos/pet.dto";
+import { IPet, PetModel } from "../models/pet.model";
 
 export class PetRepository {
-    async createPet(data: CreatePetDTO & { ownerId: string }): Promise<IPet> {
+    async createPet(ownerId: string, data: CreatePetDto): Promise<IPet> {
         const pet = await PetModel.create({
-            name: data.name,
-            species: data.species,
-            breed: data.breed,
-            age: data.age,
-            weight: data.weight,
-            ownerId: data.ownerId,
-            imageUrl: data.imageUrl
+            ...data,
+            ownerId
         });
         return pet;
     }
 
-    async getPetById(id: string): Promise<IPet | null> {
-        return PetModel.findById(id).exec();
+    async getPetById(petId: string): Promise<IPet | null> {
+        return PetModel.findById(petId).exec();
     }
 
-    // Get pet by ID and owner
-    async getPetByIdAndOwner(id: string, ownerId: string): Promise<IPet | null> {
-        return PetModel.findOne({ _id: id, ownerId }).exec();
+    async getPetsByOwnerId(ownerId: string): Promise<IPet[]> {
+        return PetModel.find({ ownerId }).exec();
     }
 
-    // Get all pets for a specific user
-    async getAllPetsByUserId(ownerId: string): Promise<IPet[]> {
-        return PetModel.find({ ownerId }).sort({ createdAt: -1 }).exec();
+    async updatePetById(petId: string, updates: UpdatePetDto): Promise<IPet | null> {
+        return PetModel.findByIdAndUpdate(petId, updates, { new: true }).exec();
     }
 
-    async updatePetById(id: string, updates: Partial<IPet>): Promise<IPet | null> {
-        return PetModel.findByIdAndUpdate(id, updates, { new: true }).exec();
-    }
-
-    async deletePetById(id: string): Promise<IPet | null> {
-        return PetModel.findByIdAndDelete(id).exec();
+    async deletePetById(petId: string): Promise<IPet | null> {
+        return PetModel.findByIdAndDelete(petId).exec();
     }
 }
