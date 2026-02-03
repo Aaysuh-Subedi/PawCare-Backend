@@ -8,6 +8,8 @@ const uploadDir = path.join(__dirname, '../../uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
+// const upload = multer({ dest: 'uploads/' }); // or configure as needed
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -21,18 +23,25 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    console.log('Uploaded file mimetype:', file.mimetype); // Add this line
+    const allowedMimeTypes = [
+        'image/jpeg',
+        'image/png',
+        'image/gif',
+        'image/heic',
+        'image/heif',
+    ];
     if (allowedMimeTypes.includes(file.mimetype)) {
         cb(null, true);
     } else {
-        cb(new HttpError(400, 'Invalid file type. Only JPEG, PNG and GIF are allowed.'));
+        cb(new HttpError(400, 'Invalid file type. Only JPEG, PNG, GIF, HEIC, and HEIF are allowed.'));
     }
-};  
-
+};
 export const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 } // 5 MB limit
+    limits: { fileSize: 5 * 1024 * 1024 },
+    dest:'/uploads/'
 });
 
 export const uploads = {

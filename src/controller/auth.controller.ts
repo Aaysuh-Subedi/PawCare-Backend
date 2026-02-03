@@ -3,6 +3,8 @@ import { CreateUserDTO, LoginUserDTO, UpdateUserDto } from "../dtos/user.dto";
 import { Request, Response } from "express";
 import z, { date, success } from "zod";
 import { ca } from "zod/v4/locales";
+import { UserModel } from "../models/user.model";
+
 
 let userService = new UserService();
 export class AuthController {
@@ -81,36 +83,38 @@ export class AuthController {
         }
     }
 
-    async updateUser(req: Request, res: Response) {
-        try {
-            const userId = req.user?._id;
-            if(!userId){
-                return res.status(401).json(
-                    { success: false, message: "Unauthorized" }
-                )
-            }
-            const parsedData = UpdateUserDto.safeParse(req.body);
-            if (!parsedData.success) {
-                return res.status(400).json(
-                    { success: false, message: z.prettifyError(parsedData.error) }
-                )
-            }
-
-            if(req.file){
-                parsedData.data.imageUrl = `/uploads/${req.file.filename}`; 
-            }
-
-
-            const updateData: UpdateUserDto = parsedData.data;
-            const updatedUser = await userService.updateUser(userId, updateData);
-            return res.status(200).json(
-                { success: true, message: "User updated successfully", data: updatedUser }
-            );
+   async updateUser(req: Request, res: Response) {
+    try {
+        if (!req.user || !req.user._id) {
+            return res.status(401).json({ success: false, message: 'Unauthorized' });
         }
-        catch (error: Error | any) {
-            return res.status(error.statusCode ?? 500).json(
-                { success: false, message: error.message || "Internal Server Error" }
-            );
+        const userId = req.user._id;
+        const user = await UserModel.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found.' });
         }
+
+        // Update other profile fields if needed
+        if (req.body.Firstname) user.Firstname = req.body.Firstname;
+        if (req.body.Lastname) user.Lastname = req.body.Lastname;
+        if (req.body.email) user.email = req.body.email;
+        if (req.body.PhoneNumber) user.phone = req.body.PhoneNumber;
+
+        // If a new profile image was uploaded
+        if (req.file) {
+            user.imageUrl = `/uploads/${req.file.filename}`;
+        }
+
+        await user.save();
+
+        res.json({
+            success: true,
+            message: 'Profile updated successfully.',
+            data: user.toObject(),
+        });
+    } catch (err: any) {
+        res.status(500).json({ success: false, message: 'Server error', error: err.message });
+    }
     }
 }
