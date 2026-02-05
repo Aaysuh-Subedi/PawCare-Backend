@@ -35,7 +35,7 @@ export class AdminStatsService {
       ]);
 
       // Filter active owners (users with role "user")
-      const activeOwners = allUsers.filter((user: IUser) => user.role === "user");
+      const activeOwners = allUsers.users.filter((user: IUser) => user.role === "user");
 
       // For now, return mock data for appointments and revenue
       // This can be updated when appointment/booking system is implemented
