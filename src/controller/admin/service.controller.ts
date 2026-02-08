@@ -1,9 +1,16 @@
 import { Request, Response } from "express";
 import ServiceService from "../../services/service.service";
+import { ProviderRepository } from "../../repositories/provider.repository";
+
+const providerRepo = new ProviderRepository();
 
 export class AdminServiceController {
   async create(req: Request, res: Response) {
     try {
+      const providerId = req.body.providerId;
+      if (!providerId) return res.status(400).json({ message: 'providerId is required' });
+      const provider = await providerRepo.getProviderById(providerId);
+      if (!provider) return res.status(404).json({ message: 'Provider not found' });
       const service = await ServiceService.createService(req.body);
       return res.status(201).json(service);
     } catch (err: any) {

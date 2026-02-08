@@ -1,5 +1,6 @@
 import authRoutes from './routes/auth.route';
 import providerRouter from "./routes/provider.route";
+import providerServiceRoute from './routes/provider/service.route';
 import petRouter from "./routes/pet.route";
 import path from 'path';
 import admiUserRoute from './routes/admin/user.route';
@@ -83,6 +84,8 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/auth', authRoutes);
 // Provider routes
 app.use("/api/provider", providerRouter);
+// Provider-managed services
+app.use('/api/provider/service', providerServiceRoute);
 // User Pet routes
 app.use("/api/user/pet", petRouter);
 // Admin User routes

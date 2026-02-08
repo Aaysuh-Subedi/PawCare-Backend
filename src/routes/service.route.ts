@@ -13,3 +13,4 @@ router.get("/:id", ServiceController.getById);
 router.get("/provider/:providerId", ServiceController.listByProvider);
 
 export default router;
+ 
