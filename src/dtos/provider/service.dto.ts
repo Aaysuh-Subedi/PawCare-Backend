@@ -1,5 +1,5 @@
 import z from "zod";
-import { ServiceSchema } from "../../types/service.type";
+import { ServiceSchema } from "../../types/provider/service.type";
 
 export const CreateServiceDto = ServiceSchema.pick({
   title: true,

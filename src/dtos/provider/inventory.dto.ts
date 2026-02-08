@@ -1,5 +1,5 @@
 import z from "zod";
-import { InventorySchema } from "../../types/inventory.type";
+import { InventorySchema } from "../../types/provider/inventory.type";
 
 export const CreateInventoryDto = InventorySchema.pick({
     product_name: true,

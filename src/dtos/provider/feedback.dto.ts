@@ -1,5 +1,5 @@
 import z from "zod";
-import { FeedbackSchema } from "../../types/feedback.type";
+import { FeedbackSchema } from "../../types/provider/feedback.type";
 
 export const CreateFeedbackDto = FeedbackSchema.pick({
     feedback: true,
