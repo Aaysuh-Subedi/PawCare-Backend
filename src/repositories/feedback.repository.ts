@@ -1,5 +1,5 @@
 import { FeedbackModel, IFeedback } from "../models/feedback.model";
-import { CreateFeedbackDto, UpdateFeedbackDto } from "../dtos/feedback.dto";
+import { CreateFeedbackDto, UpdateFeedbackDto } from "../dtos/provider/feedback.dto";
 
 export class FeedbackRepository {
     async createFeedback(data: CreateFeedbackDto, userId: string): Promise<IFeedback> {

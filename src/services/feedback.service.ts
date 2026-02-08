@@ -1,4 +1,4 @@
-import { CreateFeedbackDto, UpdateFeedbackDto } from "../dtos/feedback.dto";
+import { CreateFeedbackDto, UpdateFeedbackDto } from "../dtos/provider/feedback.dto";
 import { HttpError } from "../errors/http-error";
 import { FeedbackRepository } from "../repositories/feedback.repository";
 

@@ -1,4 +1,4 @@
-import { CreateInventoryDto, UpdateInventoryDto } from "../dtos/inventory.dto";
+import { CreateInventoryDto, UpdateInventoryDto } from "../dtos/provider/inventory.dto";
 import { HttpError } from "../errors/http-error";
 import { InventoryRepository } from "../repositories/inventory.repository";
 

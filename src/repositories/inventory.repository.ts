@@ -1,5 +1,5 @@
 import { InventoryModel, IInventory } from "../models/inventory.model";
-import { CreateInventoryDto, UpdateInventoryDto } from "../dtos/inventory.dto";
+import { CreateInventoryDto, UpdateInventoryDto } from "../dtos/provider/inventory.dto";
 
 export class InventoryRepository {
     async createInventory(data: CreateInventoryDto): Promise<IInventory> {
