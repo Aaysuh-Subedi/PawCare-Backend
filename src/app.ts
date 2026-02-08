@@ -7,6 +7,7 @@ import adminPetRoute from './routes/admin/pet.route';
 import adminProviderRoute from './routes/admin/provider.route';
 import adminStatsRoute from './routes/admin/stats.route';
 import adminBookingRoute from './routes/admin/booking.route';
+import adminServiceRoute from './routes/admin/service.route';
 import bookingRoute from './routes/booking.route';
 import express, { Application, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
@@ -93,6 +94,8 @@ app.use("/api/admin/provider", adminProviderRoute);
 app.use("/api/admin/stats", adminStatsRoute);
 // Admin Booking routes
 app.use('/api/admin/booking', adminBookingRoute);
+// Admin Service routes
+app.use('/api/admin/service', adminServiceRoute);
 
 // Booking routes
 app.use('/api/booking', bookingRoute);
