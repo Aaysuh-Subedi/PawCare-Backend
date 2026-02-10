@@ -1,5 +1,4 @@
 import z from "zod";
-import { id } from "zod/v4/locales";
 
 export const BookingSchema = z.object({
     id: z.string().optional(),
@@ -11,6 +10,7 @@ export const BookingSchema = z.object({
     serviceId: z.string().optional(),
     userId: z.string().optional(),
     petId: z.string().optional(),
+    providerId: z.string().optional(),
 })
 
 export type BookingType = z.infer<typeof BookingSchema>;

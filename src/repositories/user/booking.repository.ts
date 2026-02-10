@@ -44,5 +44,12 @@ export class BookingRepository {
     async countBookingsByUserId(userId: string) {
         return BookingModel.countDocuments({ userId }).exec();
     }
+
+    async getBookingsByProviderId(providerId: string, page: number = 1, limit: number = 10) {
+        const skip = (page - 1) * limit;
+        const bookings = await BookingModel.find({ providerId }).sort({ startTime: -1 }).skip(skip).limit(limit).exec();
+        const total = await BookingModel.countDocuments({ providerId }).exec();
+        return { bookings, total, page, limit, totalPages: Math.ceil(total / limit) };
+    }
     
 }

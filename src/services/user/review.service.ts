@@ -57,4 +57,16 @@ export class ReviewService {
         }
         return deleted;
     }
+
+    async getReviewsByProviderId(providerId: string, page: number = 1, limit: number = 10) {
+        return reviewRepository.getReviewsByProviderId(providerId, page, limit);
+    }
+
+    async getReviewsByProductId(productId: string, page: number = 1, limit: number = 10) {
+        return reviewRepository.getReviewsByProductId(productId, page, limit);
+    }
+
+    async getAverageRatingByProviderId(providerId: string) {
+        return reviewRepository.getAverageRatingByProviderId(providerId);
+    }
 }
