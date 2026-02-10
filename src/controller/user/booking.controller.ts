@@ -49,7 +49,10 @@ export class BookingController {
             const limit = parseInt(req.query.limit as string) || 10;
             const result = await bookingService.getBookingsByUserId(userId, page, limit);
             res.json(result);
-        } catch (err) { next(err); }
+        } catch (err) { 
+            console.error('Error in listByUser:', err);
+            next(err); 
+        }
     }
 
     async listByProvider(req: Request, res: Response, next: NextFunction) {

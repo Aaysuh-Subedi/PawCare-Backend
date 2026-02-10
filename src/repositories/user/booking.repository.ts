@@ -38,12 +38,22 @@ export class BookingRepository {
     }
     async getBookingsByUserId(userId: string, page: number = 1, limit: number = 10) {
         const skip = (page - 1) * limit;
-        const bookings = await BookingModel.find({ userId }).sort({ startTime: -1 }).skip(skip).limit(limit).exec();
-        return bookings;
+        try {
+            const bookings = await BookingModel.find({ userId }).sort({ startTime: -1 }).skip(skip).limit(limit).exec();
+            return bookings;
+        } catch (error) {
+            console.error('Error in getBookingsByUserId:', error);
+            throw error;
+        }
     }
 
     async countBookingsByUserId(userId: string) {
-        return BookingModel.countDocuments({ userId }).exec();
+        try {
+            return BookingModel.countDocuments({ userId }).exec();
+        } catch (error) {
+            console.error('Error in countBookingsByUserId:', error);
+            throw error;
+        }
     }
 
     async getBookingsByProviderId(providerId: string, page: number = 1, limit: number = 10) {
