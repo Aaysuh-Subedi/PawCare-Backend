@@ -49,4 +49,27 @@ export class BookingService {
             totalPages: Math.ceil(total / limit)
         };
     }
+
+    async getBookingsByProviderId(providerId: string, page: number = 1, limit: number = 10) {
+        return bookingRepository.getBookingsByProviderId(providerId, page, limit);
+    }
+
+    async updateBookingStatus(bookingId: string, providerId: string, status: string) {
+        const booking = await bookingRepository.getBookingById(bookingId);
+        if (!booking) {
+            throw new HttpError(404, "Booking not found");
+        }
+        if (booking.providerId?.toString() !== providerId.toString()) {
+            throw new HttpError(403, "Forbidden: not your booking");
+        }
+        const validStatuses = ["confirmed", "cancelled", "completed", "pending"];
+        if (!validStatuses.includes(status)) {
+            throw new HttpError(400, `Invalid status. Must be one of: ${validStatuses.join(", ")}`);
+        }
+        const updated = await bookingRepository.updateBookingById(bookingId, { status } as any);
+        if (!updated) {
+            throw new HttpError(404, "Booking not found");
+        }
+        return updated;
+    }
 }

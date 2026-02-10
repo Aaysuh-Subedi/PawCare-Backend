@@ -9,6 +9,7 @@ export class BookingRepository {
             serviceId: data.serviceId,
             petId: data.petId,
             notes: data.notes,
+            providerId: data.providerId,
             userId: userId
         });
         return booking;

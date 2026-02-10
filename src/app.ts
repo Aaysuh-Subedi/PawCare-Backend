@@ -22,11 +22,17 @@ import messageRoute from './routes/user/message.route';
 import healthRecordRoute from './routes/pet/healthrecord.route';
 import attachmentRoute from './routes/pet/attachment.route';
 import feedbackRoute from './routes/provider/feedback.route';
+import orderRoute from './routes/user/order.route';
+import adminOrderRoute from './routes/admin/order.route';
+import providerPostRoute from './routes/provider/post.route';
+import publicPostRoute from './routes/public/post.route';
+import adminPostRoute from './routes/admin/post.route';
+import providerBookingRoute from './routes/provider/booking.route';
+import publicInventoryRoute from './routes/public/inventory.route';
 import express, { Application, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { de } from 'zod/v4/locales';
 import multer from 'multer';
 import { HttpError } from './errors/http-error';
 
@@ -140,6 +146,20 @@ app.use('/api/attachment', attachmentRoute);
 app.use('/api/feedback', feedbackRoute);
 // Provider Inventory routes
 app.use('/api/provider/inventory', providerInventoryRoute);
+// Order routes (user)
+app.use('/api/order', orderRoute);
+// Admin Order routes
+app.use('/api/admin/order', adminOrderRoute);
+// Provider Post routes
+app.use('/api/provider/post', providerPostRoute);
+// Public Post routes
+app.use('/api/post', publicPostRoute);
+// Admin Post routes
+app.use('/api/admin/post', adminPostRoute);
+// Provider Booking routes
+app.use('/api/provider/booking', providerBookingRoute);
+// Public Inventory (product) routes
+app.use('/api/product', publicInventoryRoute);
 
 // Error handling middleware
 app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {

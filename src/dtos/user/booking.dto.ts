@@ -6,7 +6,8 @@ export const CreateBookingDto = BookingSchema.pick({
 	endTime: true,
 	serviceId: true,
 	petId: true,
-	notes: true
+	notes: true,
+	providerId: true
 });
 
 export type CreateBookingDto = z.infer<typeof CreateBookingDto>;
