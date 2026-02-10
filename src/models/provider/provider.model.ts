@@ -11,18 +11,21 @@ const ProviderSchema: Schema = new Schema(
         password: {type: String, required: true},
         rating: {type: Number, default: 0},
         role: {type: String, enum: ["provider"], default: "provider"},
-
+        providerType: {type: String, enum: ["shop", "vet", "babysitter"], default: null},
+        status: {type: String, enum: ["pending", "approved", "rejected"], default: "pending"},
     },
     {
         timestamps: true,
     }
 );
 
-export interface IProvider extends ProviderType, Document { //extends Document to include mongoose document properties
+export interface IProvider extends ProviderType, Document {
     _id: mongoose.Types.ObjectId;
     email: string;
     password: string;
     role: "provider";
+    providerType?: "shop" | "vet" | "babysitter";
+    status: "pending" | "approved" | "rejected";
     createdAt?: string;
     updatedAt?: string;
 }

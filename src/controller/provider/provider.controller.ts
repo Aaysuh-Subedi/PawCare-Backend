@@ -124,4 +124,48 @@ export class ProviderController {
             );
         }
     }
+
+    async setProviderType(req: Request, res: Response) {
+        try {
+            const providerId = (req as any).provider?._id || req.params.id;
+            const { providerType } = req.body;
+            if (!["shop", "vet", "babysitter"].includes(providerType)) {
+                return res.status(400).json({ success: false, message: "Invalid provider type. Must be shop, vet, or babysitter" });
+            }
+            const provider = await providerService.setProviderType(providerId, providerType);
+            return res.status(200).json({ success: true, message: "Provider type set", data: provider });
+        } catch (error: Error | any) {
+            return res.status(error.statusCode ?? 500).json({ success: false, message: error.message || "Internal Server Error" });
+        }
+    }
+
+    async approveProvider(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const provider = await providerService.approveProvider(id);
+            return res.status(200).json({ success: true, message: "Provider approved", data: provider });
+        } catch (error: Error | any) {
+            return res.status(error.statusCode ?? 500).json({ success: false, message: error.message || "Internal Server Error" });
+        }
+    }
+
+    async rejectProvider(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const provider = await providerService.rejectProvider(id);
+            return res.status(200).json({ success: true, message: "Provider rejected", data: provider });
+        } catch (error: Error | any) {
+            return res.status(error.statusCode ?? 500).json({ success: false, message: error.message || "Internal Server Error" });
+        }
+    }
+
+    async getProvidersByStatus(req: Request, res: Response) {
+        try {
+            const { status } = req.params;
+            const providers = await providerService.getProvidersByStatus(status);
+            return res.status(200).json({ success: true, data: providers });
+        } catch (error: Error | any) {
+            return res.status(error.statusCode ?? 500).json({ success: false, message: error.message || "Internal Server Error" });
+        }
+    }
 }

@@ -37,6 +37,8 @@ export class ProviderService {
             email: provider.email,
             businessName: provider.businessName,
             role: provider.role || "provider",
+            providerType: provider.providerType || null,
+            status: provider.status || "pending",
         };
 
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "30d" });
@@ -55,7 +57,7 @@ export class ProviderService {
         return providerRepository.getAllProviders();
     }
 
-    async updateProvider(id: string, updates: Partial<{ businessName: string; address: string; phone: string; email: string }>) {
+    async updateProvider(id: string, updates: Record<string, any>) {
         const provider = await providerRepository.updateProviderById(id, updates);
         if (!provider) {
             throw new HttpError(404, "Provider not found");
@@ -69,5 +71,37 @@ export class ProviderService {
             throw new HttpError(404, "Provider not found");
         }
         return provider;
+    }
+
+    async setProviderType(id: string, providerType: "shop" | "vet" | "babysitter") {
+        const provider = await providerRepository.updateProviderById(id, { providerType });
+        if (!provider) {
+            throw new HttpError(404, "Provider not found");
+        }
+        return provider;
+    }
+
+    async approveProvider(id: string) {
+        const provider = await providerRepository.updateProviderById(id, { status: "approved" });
+        if (!provider) {
+            throw new HttpError(404, "Provider not found");
+        }
+        return provider;
+    }
+
+    async rejectProvider(id: string) {
+        const provider = await providerRepository.updateProviderById(id, { status: "rejected" });
+        if (!provider) {
+            throw new HttpError(404, "Provider not found");
+        }
+        return provider;
+    }
+
+    async getProvidersByType(providerType: string) {
+        return providerRepository.getProvidersByType(providerType);
+    }
+
+    async getProvidersByStatus(status: string) {
+        return providerRepository.getProvidersByStatus(status);
     }
 }

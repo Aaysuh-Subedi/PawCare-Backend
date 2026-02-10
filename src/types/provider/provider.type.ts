@@ -8,6 +8,8 @@ export const ProviderSchema = z.object({
     userId: z.string().optional(),
     userId2: z.string().optional(),
     role: z.enum(["provider"]).default("provider"),
+    providerType: z.enum(["shop", "vet", "babysitter"]).optional(),
+    status: z.enum(["pending", "approved", "rejected"]).default("pending"),
     avatarUrl: z.string().optional(),
     createdAt: z.string().optional()
 });
