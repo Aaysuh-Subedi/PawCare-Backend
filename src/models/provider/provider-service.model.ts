@@ -1,9 +1,9 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { ProviderServiceType } from "../../types/provider/provider-service.type";
 
-const ProviderServiceSchema: Schema = new Schema<ProviderServiceType>(
+const ProviderServiceSchema: Schema = new Schema(
     {
-        userId: { type: String, required: true, index: true },
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
         serviceType: {
             type: String,
             enum: ["vet", "groomer", "boarding", "shop_owner"],
@@ -26,6 +26,9 @@ const ProviderServiceSchema: Schema = new Schema<ProviderServiceType>(
     },
     { timestamps: true }
 );
+
+ProviderServiceSchema.index({ userId: 1, serviceType: 1 }, { unique: true });
+ProviderServiceSchema.index({ verificationStatus: 1, serviceType: 1, createdAt: -1 });
 
 ProviderServiceSchema.virtual("id").get(function (this: IProviderService) {
     return this._id.toHexString();

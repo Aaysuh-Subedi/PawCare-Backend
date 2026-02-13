@@ -6,8 +6,8 @@ const ProviderSchema: Schema = new Schema(
         businessName: {type: String, required: true},
         address: {type: String, required: true},
         phone: {type: String},
-            userId: { type: String, required: false },
-        email: {type: String, required: true, unique: true},
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: false, index: true },
+        email: {type: String, required: true, unique: true, lowercase: true, trim: true, index: true},
         password: {type: String, required: true},
         rating: {type: Number, default: 0},
         role: {type: String, enum: ["provider"], default: "provider"},
@@ -18,6 +18,8 @@ const ProviderSchema: Schema = new Schema(
         timestamps: true,
     }
 );
+
+ProviderSchema.index({ status: 1, providerType: 1, createdAt: -1 });
 
 export interface IProvider extends ProviderType, Document {
     _id: mongoose.Types.ObjectId;

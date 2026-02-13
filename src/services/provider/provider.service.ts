@@ -2,12 +2,18 @@ import { CreateProviderDTO, LoginProviderDTO } from "../../dtos/provider/provide
 import bcryptjs from "bcryptjs";
 import { HttpError } from "../../errors/http-error";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../../config";
+import { JWT_ACCESS_EXPIRES_IN, JWT_SECRET } from "../../config";
 import { ProviderRepository } from "../../repositories/provider/provider.repository";
 
 const providerRepository = new ProviderRepository();
 
 export class ProviderService {
+    private sanitizeProvider(provider: Record<string, any>) {
+        const plain = typeof provider.toObject === "function" ? provider.toObject() : provider;
+        const { password, ...safeProvider } = plain;
+        return safeProvider;
+    }
+
     async createProvider(data: CreateProviderDTO) {
         const emailCheck = await providerRepository.getProviderByEmail(data.email);
         if (emailCheck) {
@@ -41,8 +47,8 @@ export class ProviderService {
             status: provider.status || "pending",
         };
 
-        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "30d" });
-        return { token, provider };
+        const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_ACCESS_EXPIRES_IN as jwt.SignOptions["expiresIn"] });
+        return { token, provider: this.sanitizeProvider(provider as unknown as Record<string, any>) };
     }
 
     async getProviderById(id: string) {

@@ -60,7 +60,7 @@ export class ProviderController {
             const loginData: LoginProviderDTO = parsedData.data;
             const { token, provider } = await providerService.loginProvider(loginData);
             return res.status(200).json(
-                { success: true, message: "Login successful", data: provider, token }
+                { success: true, message: "Login successful", data: { provider, accessToken: token }, token }
             );
         } catch (error: Error | any) {
             return res.status(error.statusCode ?? 500).json(
