@@ -5,7 +5,7 @@ const BookingSchema: Schema = new Schema(
     {
         startTime: {type: String, required: true},
         endTime: {type: String, required: true},
-        status: {type: String, enum: ["pending", "confirmed", "completed", "cancelled"], default: "pending"},
+        status: {type: String, enum: ["pending", "confirmed", "completed", "cancelled", "rejected"], default: "pending"},
         price: {type: Number, min: 0, required: false},
         notes: {type: String, required: false},
         serviceId: {type: mongoose.Schema.Types.ObjectId, ref: "Service", required: false, index: true},

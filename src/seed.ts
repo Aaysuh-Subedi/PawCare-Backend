@@ -186,7 +186,7 @@ async function seedDatabase() {
         console.log("Seeded services:", createdServices.length);
 
         // ========== BOOKINGS ==========
-        const statuses = ["pending", "confirmed", "completed", "cancelled"] as const;
+        const statuses = ["pending", "confirmed", "completed", "cancelled", "rejected"] as const;
         const bookingNotes = [
             "Please be gentle, pet is nervous",
             "First time visit",
@@ -474,7 +474,7 @@ async function seedDatabase() {
         console.log(`- Providers: ${createdProviders.length}`);
         console.log(`- Pets: ${createdPets.length}`);
         console.log(`- Services: ${createdServices.length}`);
-        console.log(`- Bookings: ${createdBookings.length} (${bookings.filter(b => b.status === 'completed').length} completed, ${bookings.filter(b => b.status === 'cancelled').length} cancelled, ${bookings.filter(b => b.status === 'confirmed').length} confirmed, ${bookings.filter(b => b.status === 'pending').length} pending)`);
+        console.log(`- Bookings: ${createdBookings.length} (${bookings.filter(b => b.status === 'completed').length} completed, ${bookings.filter(b => b.status === 'cancelled').length} cancelled, ${bookings.filter(b => b.status === 'rejected').length} rejected, ${bookings.filter(b => b.status === 'confirmed').length} confirmed, ${bookings.filter(b => b.status === 'pending').length} pending)`);
         console.log(`- Reviews: ${createdReviews.length}`);
         console.log(`- Messages: ${createdMessages.length}`);
         console.log(`- Health Records: ${createdHealthRecords.length}`);
